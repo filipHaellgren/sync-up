@@ -7,19 +7,16 @@ export default function GamesPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/steam-session")
+    fetch("/api/user/games")
       .then((res) => res.json())
       .then((data) => {
-        if (!data.steamid) {
-          setError("No Steam ID found.");
-          return;
+        if (data.error) {
+          setError(data.error);
+        } else {
+          setGames(data);
         }
-        fetch(`/api/steam-user?steamid=${data.steamid}`)
-          .then((res) => res.json())
-          .then((user) => setGames(user.games || []))
-          .catch(() => setError("Could not load games."));
       })
-      .catch(() => setError("Session error."));
+      .catch(() => setError("Failed to load games."));
   }, []);
 
   return (
