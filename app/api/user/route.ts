@@ -1,6 +1,6 @@
-// app/api/user/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getSteamProfile } from "@/lib/steam";
 
 export async function GET(req: NextRequest) {
   const cookieStore = await cookies();
@@ -12,13 +12,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await fetch(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamid}`
-    );
-    const data = await res.json();
-
-    return NextResponse.json(data.response.players[0] || {});
+    const profile = await getSteamProfile(steamid, apiKey);
+    return NextResponse.json(profile);
   } catch (err) {
+    console.error("Steam API error:", err);
     return NextResponse.json({ error: "Failed to fetch Steam profile" }, { status: 500 });
   }
 }

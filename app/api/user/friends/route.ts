@@ -1,10 +1,11 @@
 // app/api/user/friends/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getSteamFriends } from "@/lib/steam";
 
 export async function GET(req: NextRequest) {
-    const cookieStore = await cookies();
-    const steamid = cookieStore.get("steamid")?.value;
+  const cookieStore = await cookies();
+  const steamid = cookieStore.get("steamid")?.value;
   const apiKey = process.env.STEAM_API_KEY;
 
   if (!steamid || !apiKey) {
@@ -12,21 +13,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const friendsRes = await fetch(
-      `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${apiKey}&steamid=${steamid}`
-    );
-    const friendsList = await friendsRes.json();
-    const friendIds = friendsList?.friendslist?.friends?.map((f: any) => f.steamid).join(",");
-
-    if (!friendIds) return NextResponse.json([]);
-
-    const detailsRes = await fetch(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${friendIds}`
-    );
-    const details = await detailsRes.json();
-
-    return NextResponse.json(details.response.players || []);
+    const friends = await getSteamFriends(steamid, apiKey);
+    return NextResponse.json(friends);
   } catch (err) {
+    console.error("Failed to fetch friends:", err);
     return NextResponse.json({ error: "Failed to fetch friends" }, { status: 500 });
   }
 }

@@ -1,31 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { cookies } from "next/headers";
+import { getSteamProfile, getSteamFriends } from "@/lib/steam";
 import Link from "next/link";
 
-export default function Dashboard() {
-  const [profile, setProfile] = useState<any>(null);
-  const [friends, setFriends] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+export default async function Dashboard() {
+  const cookieStore = await cookies(); // ✅ Await it
+  const steamid = cookieStore.get("steamid")?.value;
+  const apiKey = process.env.STEAM_API_KEY;
 
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/user").then((res) => res.json()),
-      fetch("/api/user/friends").then((res) => res.json()),
-    ])
-      .then(([userProfile, userFriends]) => {
-        if (userProfile.error) return setError(userProfile.error);
-        setProfile(userProfile);
-        setFriends(userFriends);
-      })
-      .catch((err) => {
-        console.error("Failed to load dashboard data:", err);
-        setError("Could not load Steam data.");
-      });
-  }, []);
+  if (!steamid || !apiKey) {
+    return <div className="p-6 text-red-500">Not logged in.</div>;
+  }
 
-  if (error) return <div className="p-6 text-red-500">{error}</div>;
-  if (!profile) return <div className="p-6 text-white">Loading...</div>;
+  const profile = await getSteamProfile(steamid, apiKey);
+  const friends = await getSteamFriends(steamid, apiKey);
 
   return (
     <div className="flex h-screen bg-[#2B2D31] text-white">
@@ -85,12 +72,14 @@ export default function Dashboard() {
           <p className="text-sm text-gray-400">This area could show news, game recs, etc.</p>
         </div>
 
-        <button
-          onClick={() => (window.location.href = "/api/logout")}
-          className="mt-8 bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
-        >
-          Logout
-        </button>
+        <form action="/api/logout" method="POST">
+          <button
+            type="submit"
+            className="mt-8 bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
+          >
+            Logout
+          </button>
+        </form>
       </main>
     </div>
   );
