@@ -1,8 +1,9 @@
+import { getSteamFriends } from '@/lib/steam';
 import React from 'react'
 
-export default function FriendsList({userData}) {
+export default async function FriendsList() {
 
-   
+    const friends = await getSteamFriends(steamid, apiKey);
   return (
     <div>
          <div className="p-4 pt-2">
@@ -11,8 +12,8 @@ export default function FriendsList({userData}) {
                 <h2 className="text-sm text-gray-400 uppercase tracking-wide mb-2">Groups</h2>
             </div>
                 <ul className="space-y-2 mt-2">
-                {userData.friends.length > 0 ? (
-                    userData.friends.map((friend: any) => (
+                {friends.length > 0 ? (
+                    friends.map((friend: any) => (
                     <li
                         key={friend.steamid}
                         className="flex items-center gap-2 p-2 rounded hover:bg-[#313338] cursor-pointer"

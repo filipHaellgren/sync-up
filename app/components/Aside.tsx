@@ -3,7 +3,7 @@ import Profile from './Profile'
 import FriendsList from './FriendsList'
 
 
-export default function Aside({ userData }) {
+export default function Aside() {
 
   
     return (
@@ -11,11 +11,11 @@ export default function Aside({ userData }) {
         className={`bg-[#1E1F22] overflow-y-auto relative sm:"w-[100vw]" "w-[30vw]" 
         }`}
       >
-        {/* Sticky Profile */}
-        <Profile userData={userData} />
+        
+        <Profile />
   
-        {/* Friends List */}
-        <FriendsList userData={userData} />
+     
+        <FriendsList/>
       </aside>
     );
   }
