@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+/* import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSteamProfile } from "@/lib/steam";
 
@@ -18,4 +18,4 @@ export async function GET(req: NextRequest) {
     console.error("Steam API error:", err);
     return NextResponse.json({ error: "Failed to fetch Steam profile" }, { status: 500 });
   }
-}
+} */

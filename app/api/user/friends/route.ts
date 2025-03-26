@@ -1,4 +1,4 @@
-// app/api/user/friends/route.ts
+/* // app/api/user/friends/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSteamFriends } from "@/lib/steam";
@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
   if (!steamid || !apiKey) {
     return NextResponse.json({ error: "Unauthorized or missing API key" }, { status: 401 });
   }
-// ballsack comment
   try {
     const friends = await getSteamFriends(steamid, apiKey);
     return NextResponse.json(friends);
@@ -19,4 +18,4 @@ export async function GET(req: NextRequest) {
     console.error("Failed to fetch friends:", err);
     return NextResponse.json({ error: "Failed to fetch friends" }, { status: 500 });
   }
-}
+} */
