@@ -13,7 +13,7 @@ export default async function FriendsList() {
 
   return (
     <div className="p-4 pt-2">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-6">
         <h2 className="text-sm text-gray-400 uppercase tracking-wide mb-2">Friends</h2>
         <h2 className="text-sm text-gray-400 uppercase tracking-wide mb-2">Groups</h2>
       </div>
