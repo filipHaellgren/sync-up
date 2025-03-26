@@ -16,9 +16,9 @@ export default async function Dashboard() {
 
   return (
     <div className="flex h-screen bg-[#2B2D31] text-white">
-      {/* Sidebar */}
+
       <aside className="w-64 bg-[#1E1F22] overflow-y-auto relative">
-        {/* Sticky Profile */}
+      
         <div className="sticky top-0 z-20 bg-[#1E1F22] p-4 border-b border-[#313338]">
           <Link href="/dashboard/games">
             <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition">
@@ -35,7 +35,7 @@ export default async function Dashboard() {
           </Link>
         </div>
 
-        {/* Friends List */}
+  
         <div className="p-4 pt-2">
           <h2 className="text-sm text-gray-400 uppercase tracking-wide mb-2">Friends</h2>
           <ul className="space-y-2 mt-2">
@@ -60,7 +60,7 @@ export default async function Dashboard() {
         </div>
       </aside>
 
-      {/* Main content */}
+
       <main className="flex-1 p-6 overflow-y-auto">
         <div className="mb-4">
           <h1 className="text-2xl font-bold">Dashboard</h1>
