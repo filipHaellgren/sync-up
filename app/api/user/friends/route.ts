@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   if (!steamid || !apiKey) {
     return NextResponse.json({ error: "Unauthorized or missing API key" }, { status: 401 });
   }
-
+// ballsack comment
   try {
     const friends = await getSteamFriends(steamid, apiKey);
     return NextResponse.json(friends);
