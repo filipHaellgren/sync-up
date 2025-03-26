@@ -1,51 +1,22 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { cookies } from "next/headers";
+import { getSteamProfile, getSteamFriends } from "@/lib/steam";
 import Aside from "../components/Aside";
 import Main from "../components/Main";
 
 
 
-export default function Dashboard() {
-  const [userData, setUserData] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  
-  
-  useEffect(() => {
-    fetch("/api/steam-session")
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.steamid) {
-        setError("No Steam ID found. Please log in.");
-        return;
-      }
-      fetch(`/api/steam-user?steamid=${data.steamid}`)
-      .then((res) => res.json())
-      .then((user) => {
-        if (user.error) {
-          setError(user.error);
-        } else {
-          setUserData(user);
-          
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching Steam user:", err);
-        setError("Could not load Steam data.");
-      });
-    })
-    .catch((err) => {
-      console.error("Error fetching session:", err);
-      setError("Could not verify session.");
-    });
-  }, []);
-  if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
+export default async function Dashboard() {
+  const cookieStore = await cookies(); // ✅ Await it
+  const steamid = cookieStore.get("steamid")?.value;
+  const apiKey = process.env.STEAM_API_KEY;
+
+  if (!steamid || !apiKey) {
+    return <div className="p-6 text-red-500">Not logged in.</div>;
   }
-  if (!userData) {
-    return <div className="p-6 text-white">Loading...</div>;
-  }
- 
+
+  const profile = await getSteamProfile(steamid, apiKey);
+  const friends = await getSteamFriends(steamid, apiKey);
+
   return (
     <div className=" md:flex h-screen bg-[#2B2D31] text-white">     
   <Aside userData={userData} />
