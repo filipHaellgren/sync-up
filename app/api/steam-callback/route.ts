@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { db } from "@/lib/firebase";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,7 +16,28 @@ export async function GET(req: NextRequest) {
     const steamId = steamIdMatch[0];
     console.log("✅ Extracted Steam ID:", steamId);
 
-    // 🚀 Fix: Use a Set-Cookie header instead of `cookies().set()`
+    // ✅ Fetch user profile from Steam API
+    const apiKey = process.env.STEAM_API_KEY;
+    const profileRes = await fetch(
+      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`
+    );
+    const profileData = await profileRes.json();
+    const profile = profileData.response.players[0];
+
+    if (!profile) {
+      console.error("❌ Failed to fetch Steam profile");
+      return NextResponse.json({ error: "Failed to fetch profile" }, { status: 500 });
+    }
+
+    // ✅ Save to Firestore
+    await setDoc(doc(db, "users", steamId), {
+      steamid: steamId,
+      personaname: profile.personaname,
+      avatar: profile.avatarfull,
+      lastLogin: serverTimestamp(),
+    });
+
+    // ✅ Set session cookie
     const response = NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`);
     response.headers.set("Set-Cookie", `steamid=${steamId}; Path=/; HttpOnly; Secure; SameSite=Lax`);
 
