@@ -14,9 +14,9 @@ export default function Main({
   }
 
   return (
-    <main className="flex-1 p-6 overflow-y-auto">
-      <Chat currentUserId={profile.steamid} friendId={selectedFriend.steamid} />
+    <main className="flex-1  overflow-y-auto w-[70vw]  h-screen">
       <LogoutButton />
+      <Chat currentUserId={profile.steamid} friendId={selectedFriend.steamid} />
     </main>
   );
 }

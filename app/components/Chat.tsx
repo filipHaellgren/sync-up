@@ -33,18 +33,20 @@ export default function Chat({ currentUserId, friendId }: { currentUserId: strin
   };
 
   return (
-    <div className="p-4">
+    <div className="flex flex-col">
       <ChatWindow messages={messages} userId={currentUserId}/>
+      <div className=" flex flex-row">
       <input
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        className="w-full p-2 text-black rounded"
+        className="w-full border-2 border-green-700 rounded-xl"
         placeholder="Type a message..."
       />
       <button onClick={sendMessage} className="mt-2 bg-blue-500 px-4 py-1 rounded">
         Send
       </button>
+      </div>
     </div>
   );
 }

@@ -6,11 +6,9 @@
  interface Message {
     message: string;
     from: string;
-   
   }
 
   export interface ProfileType  {
-
     profile : {
         avatarfull?: string,
         personaname?: string,
