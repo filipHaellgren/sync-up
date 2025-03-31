@@ -1,21 +1,6 @@
-import { getSteamProfile } from "@/lib/steam";
-import { getSteamSession } from "@/lib/getSteamSession";
 import Link from "next/link";
 
-export default async function Profile() {
-  const session = await getSteamSession();
-
-  if (!session) {
-    return (
-      <div className="p-4 text-red-500 text-sm border-b border-[#313338]">
-        Not logged in.
-      </div>
-    );
-  }
-
-  const { steamid, apiKey } = session;
-  const profile = await getSteamProfile(steamid, apiKey);
-
+export default function Profile({ profile }: { profile: any }) {
   return (
     <div className="sticky top-0 z-20 bg-[#1E1F22] p-4 border-b border-[#313338]">
       <Link href="/dashboard/games">
