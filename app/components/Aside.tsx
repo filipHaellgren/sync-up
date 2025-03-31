@@ -1,3 +1,4 @@
+import { ProfileType } from "../types";
 import Profile from "./Profile";
 
 export default function Aside({
@@ -5,7 +6,7 @@ export default function Aside({
   friends,
   setSelectedFriend,
 }: {
-  profile: any;
+  profile: ProfileType;
   friends: any[];
   setSelectedFriend: (f: any) => void;
 }) {

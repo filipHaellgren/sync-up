@@ -12,11 +12,10 @@ export default async function Dashboard() {
   const profile = await getSteamProfile(steamid, apiKey);
   const friends = await getSteamFriends(steamid, apiKey);
 
-  // 🔥 Get all users from Firestore
   const snapshot = await getDocs(collection(db, "users"));
   const loggedInSteamIds = snapshot.docs.map((doc) => doc.id);
 
-  // ✅ Only show friends that exist in Firestore
+ 
   const filteredFriends = friends.filter((friend: any) =>
     loggedInSteamIds.includes(friend.steamid)
   );

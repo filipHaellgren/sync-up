@@ -1,11 +1,12 @@
 import LogoutButton from "./LogOutButton";
 import Chat from "./Chat";
+import { ProfileType } from "../types";
 
 export default function Main({
   profile,
   selectedFriend,
 }: {
-  profile: any;
+  profile: ProfileType;
   selectedFriend: any | null;
 }) {
   if (!selectedFriend) {

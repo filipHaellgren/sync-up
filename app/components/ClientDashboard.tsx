@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Aside from "./Aside";
 import Main from "./Main";
+import { ProfileType } from "../types";
 
-export default function ClientDashboard({ profile, friends }: { profile: any; friends: any[] }) {
+export default function ClientDashboard({ profile, friends }: { profile: ProfileType; friends: any[] }) {
   const [selectedFriend, setSelectedFriend] = useState<any | null>(null);
 
   return (

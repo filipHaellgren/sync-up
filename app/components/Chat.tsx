@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import ChatWindow from "./ChatWindow";
 
 const socket = io("http://localhost:3001");
 
@@ -33,13 +34,7 @@ export default function Chat({ currentUserId, friendId }: { currentUserId: strin
 
   return (
     <div className="p-4">
-      <div className="mb-4 space-y-2">
-        {messages.map((msg, i) => (
-          <p key={i} className={msg.from === currentUserId ? "text-right text-blue-400" : "text-left text-gray-300"}>
-            {msg.message}
-          </p>
-        ))}
-      </div>
+      <ChatWindow messages={messages} userId={currentUserId}/>
       <input
         type="text"
         value={message}
