@@ -1,55 +1,113 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useState, useRef } from "react";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-const socket = io("http://localhost:3001");
-
-export default function Chat({ currentUserId, friendId }: { currentUserId: string; friendId: string }) {
-  const [message, setMessage] = useState("");
+export default function Chat({
+  currentUserId,
+  friendId,
+}: {
+  currentUserId: string;
+  friendId: string;
+}) {
   const [messages, setMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const chatId =
+    currentUserId < friendId
+      ? `${currentUserId}_${friendId}`
+      : `${friendId}_${currentUserId}`;
 
   useEffect(() => {
-    socket.emit("join", currentUserId);
+    const q = query(
+      collection(db, "chats", chatId, "messages"),
+      orderBy("timestamp", "asc")
+    );
 
-    socket.on("receive-message", (data) => {
-      setMessages((prev) => [...prev, { from: data.from, message: data.message }]);
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const msgs = snapshot.docs.map((doc) => doc.data());
+      setMessages(msgs);
     });
 
-    return () => {
-      socket.off("receive-message");
-    };
-  }, [currentUserId]);
+    return () => unsubscribe();
+  }, [chatId]);
 
-  const sendMessage = () => {
-    socket.emit("send-message", {
-      to: friendId,
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return;
+  
+    // 1. Add message to subcollection
+    await addDoc(collection(db, "chats", chatId, "messages"), {
+      text: newMessage,
       from: currentUserId,
-      message
+      to: friendId,
+      timestamp: serverTimestamp(),
     });
-    setMessages((prev) => [...prev, { from: currentUserId, message }]);
-    setMessage("");
+  
+    // 2. Update or create parent chat document
+    await setDoc(
+      doc(db, "chats", chatId),
+      {
+        users: [currentUserId, friendId],
+        lastMessage: newMessage,
+        lastMessageAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  
+    setNewMessage("");
+  
   };
 
   return (
-    <div className="p-4">
-      <div className="mb-4 space-y-2">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto space-y-2 pr-2">
         {messages.map((msg, i) => (
-          <p key={i} className={msg.from === currentUserId ? "text-right text-blue-400" : "text-left text-gray-300"}>
-            {msg.message}
-          </p>
+          <div
+            key={i}
+            className={`max-w-[70%] px-4 py-2 rounded-lg ${
+              msg.from === currentUserId
+                ? "bg-blue-500 text-white self-end ml-auto text-right"
+                : "bg-gray-600 text-white self-start mr-auto text-left"
+            }`}
+          >
+            {msg.text}
+          </div>
         ))}
+        <div ref={bottomRef} />
       </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        className="w-full p-2 text-black rounded"
-        placeholder="Type a message..."
-      />
-      <button onClick={sendMessage} className="mt-2 bg-blue-500 px-4 py-1 rounded">
-        Send
-      </button>
+
+      <div className="pt-4 flex gap-2">
+        <input
+          className="flex-1 rounded px-4 py-2 text-black"
+          placeholder="Type a message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") sendMessage();
+          }}
+        />
+        <button
+          onClick={sendMessage}
+          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-white"
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 }
