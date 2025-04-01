@@ -1,4 +1,4 @@
-/* // app/api/user/games/route.ts
+// app/api/user/games/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getOwnedGames } from "@/lib/steam";
@@ -19,4 +19,4 @@ export async function GET(req: NextRequest) {
     console.error("Failed to fetch games:", err);
     return NextResponse.json({ error: "Failed to fetch games" }, { status: 500 });
   }
-} */
+}

@@ -9,6 +9,19 @@ export default function ChatList({
   friends: any[];
   onSelectFriend: (friendId: string) => void;
 }) {
+  const getStatusText = (personastate: number) => {
+    switch (personastate) {
+      case 0:
+        return "Offline";
+      case 1:
+        return "Online";
+      case 2:
+        return "Busy";
+      case 3:
+        return "Away";
+    }
+  };
+
   return (
     <div className="p-4 space-y-2">
       {friends.length === 0 ? (
@@ -25,7 +38,15 @@ export default function ChatList({
               alt={friend.personaname}
               className="w-8 h-8 rounded-full"
             />
-            <span className="text-sm text-white">{friend.personaname}</span>
+            <div className="flex flex-col">
+              <span className="text-sm text-white font-semibold">
+                {friend.personaname}
+              </span>
+              <span className="text-xs text-gray-400">
+                {getStatusText(friend.personastate)}
+                {friend.gameextrainfo ? ` – Playing ${friend.gameextrainfo}` : ""}
+              </span>
+            </div>
           </div>
         ))
       )}

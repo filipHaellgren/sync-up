@@ -22,10 +22,17 @@ export async function getSteamProfile(steamid: string, apiKey: string) {
   
     return details.response.players || [];
   }
-  
   export async function getOwnedGames(steamid: string, apiKey: string) {
     const res = await fetch(
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${apiKey}&steamid=${steamid}&include_appinfo=true`
+    );
+    const data = await res.json();
+    return data.response.games || [];
+  }
+
+  export async function getRecentlyPlayedGames(steamid: string, apiKey: string) {
+    const res = await fetch(
+      `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${apiKey}&steamid=${steamid}`
     );
     const data = await res.json();
     return data.response.games || [];
