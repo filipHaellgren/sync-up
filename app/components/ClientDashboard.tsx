@@ -5,6 +5,7 @@ import Chat from "./Chat";
 import Sidebar from "./Sidebar";
 import GameCard from "./GameCard"; // 👈 updated import
 import { FriendType, ProfileType } from "../styles";
+import { ChatProvider } from "../context/ChatContext";
 
 export default function ClientDashboard({
   profile,
@@ -29,10 +30,12 @@ export default function ClientDashboard({
       {/* Main */}
       <main className="flex-1 p-6 overflow-y-auto">
         {selectedFriend ? (
+          <ChatProvider>
           <Chat
-            currentUserId={profile.steamid}
-            friendId={selectedFriend.steamid}
-          />
+            user={profile}
+            friend={selectedFriend}
+            />
+            </ChatProvider>
         ) : (
           <div>
             <h1 className="text-xl font-bold mb-4">

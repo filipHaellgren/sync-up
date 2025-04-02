@@ -13,8 +13,8 @@ export default async function Dashboard() {
   const allFriends = await getSteamFriends(steamid, apiKey);
   const recentGames = await getRecentlyPlayedGames(steamid, apiKey);
 
-  const snapshot = await getDocs(collection(db, "users"));
-  const loggedInIds = snapshot.docs.map((doc) => doc.id);
+  const users = await getDocs(collection(db, "users"));
+  const loggedInIds = users.docs.map((user) => user.id);
   const filteredFriends = allFriends.filter((friend: any) =>
     loggedInIds.includes(friend.steamid)
   );
