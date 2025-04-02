@@ -1,3 +1,5 @@
+import { FriendType } from "@/app/styles";
+
 export async function getSteamProfile(steamid: string, apiKey: string) {
     const res = await fetch(
       `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamid}`
@@ -11,7 +13,7 @@ export async function getSteamProfile(steamid: string, apiKey: string) {
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${apiKey}&steamid=${steamid}`
     );
     const friendsList = await friendsRes.json();
-    const friendIds = friendsList?.friendslist?.friends?.map((f: any) => f.steamid).join(",");
+    const friendIds = friendsList?.friendslist?.friends?.map((friend: FriendType) => friend.steamid).join(",");
   
     if (!friendIds) return [];
   

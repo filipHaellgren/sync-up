@@ -1,15 +1,15 @@
 "use client";
 
+import { FriendType } from "../styles";
+
 export default function ChatList({
-  currentUserId,
   friends,
   onSelectFriend,
 }: {
-  currentUserId: string;
-  friends: any[];
+  friends: FriendType[];
   onSelectFriend: (friendId: string) => void;
 }) {
-  const getStatusText = (personastate: number) => {
+  const getStatusText = (personastate: number | undefined) => {
     switch (personastate) {
       case 0:
         return "Offline";
@@ -44,7 +44,6 @@ export default function ChatList({
               </span>
               <span className="text-xs text-gray-400">
                 {getStatusText(friend.personastate)}
-                {friend.gameextrainfo ? ` – Playing ${friend.gameextrainfo}` : ""}
               </span>
             </div>
           </div>

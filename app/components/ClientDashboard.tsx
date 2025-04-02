@@ -4,14 +4,15 @@ import { useState } from "react";
 import Chat from "./Chat";
 import Sidebar from "./Sidebar";
 import GameCard from "./GameCard"; // 👈 updated import
+import { FriendType, ProfileType } from "../styles";
 
 export default function ClientDashboard({
   profile,
   friends,
   recentGames,
 }: {
-  profile: any;
-  friends: any[];
+  profile: ProfileType;
+  friends: FriendType[];
   recentGames: any[];
 }) {
   const [selectedFriend, setSelectedFriend] = useState<any | null>(null);

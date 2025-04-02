@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { ProfileType } from "../styles";
 
-export default function Profile({ profile }: { profile: any }) {
+export default function Profile({ profile }: { profile: ProfileType }) {
   return (
     <div className="sticky top-0 z-20 bg-[#1E1F22] p-4 border-b border-[#313338]">
       <Link href="/dashboard/games">
