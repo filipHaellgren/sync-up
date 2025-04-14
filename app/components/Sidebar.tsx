@@ -8,20 +8,16 @@ export default function Sidebar({
   friends,
   onSelectFriend,
 }: {
-  profile:  ProfileType;
+  profile: ProfileType;
   friends: FriendType[];
-  onSelectFriend: (friendId: string | undefined) => void;
-  
+  onSelectFriend: (friend: FriendType) => void; // ✅ updated here
 }) {
   return (
     <aside className="w-64 bg-[#1E1F22] overflow-y-auto relative">
       <Profile profile={profile} />
       <ChatList
         friends={friends}
-        onSelectFriend={(id) => {
-          const selectedFriend = friends.find((friend) => friend.steamid === id);
-          onSelectFriend(selectedFriend?.steamid); 
-        }}
+        onSelectFriend={onSelectFriend} // ✅ pass it directly
       />
     </aside>
   );
