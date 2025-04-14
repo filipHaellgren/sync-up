@@ -10,7 +10,7 @@ export default function Sidebar({
 }: {
   profile:  ProfileType;
   friends: FriendType[];
-  onSelectFriend: (friendId: string | undefined) => void;
+  onSelectFriend: (friend: FriendType) => void
   
 }) {
   return (
@@ -18,11 +18,8 @@ export default function Sidebar({
       <Profile profile={profile} />
       <ChatList
         friends={friends}
-        onSelectFriend={(id) => {
-          const selectedFriend = friends.find((friend) => friend.steamid === id);
-          onSelectFriend(selectedFriend?.steamid); 
-        }}
-      />
+         onSelectFriend={(friend) => onSelectFriend(friend)} 
+/>
     </aside>
   );
 }

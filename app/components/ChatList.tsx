@@ -7,7 +7,7 @@ export default function ChatList({
   onSelectFriend,
 }: {
   friends: FriendType[];
-  onSelectFriend: (friendId: string) => void;
+  onSelectFriend: (friend: FriendType) => void
 }) {
   const getStatusText = (personastate: number | undefined) => {
     switch (personastate) {
@@ -30,7 +30,7 @@ export default function ChatList({
         friends.map((friend) => (
           <div
             key={friend.steamid}
-            onClick={() => onSelectFriend(friend.steamid)}
+            onClick={() => onSelectFriend(friend)} 
             className="flex items-center gap-3 p-2 bg-[#313338] rounded hover:bg-[#3a3c41] cursor-pointer transition"
           >
             <img
