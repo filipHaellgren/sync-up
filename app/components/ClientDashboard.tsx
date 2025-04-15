@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Chat from "./Chat";
 import Sidebar from "./Sidebar";
-import GameCard from "./GameCard"; // 👈 updated import
+import GameCard from "./GameCard"; 
 import { FriendType, ProfileType } from "../styles";
 import { ChatProvider } from "../context/ChatContext";
 
@@ -16,7 +16,7 @@ export default function ClientDashboard({
   friends: FriendType[];
   recentGames: any[];
 }) {
-  const [selectedFriend, setSelectedFriend] = useState<any | null>(null);
+  const [selectedFriend, setSelectedFriend] = useState<FriendType| null>(null);
 
   return (
     <div className="flex h-screen bg-[#2B2D31] text-white">

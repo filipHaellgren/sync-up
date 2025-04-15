@@ -20,6 +20,8 @@ export default function ChatList({
       case 3:
         return "Away";
     }
+
+ 
   };
 
   return (
@@ -28,6 +30,7 @@ export default function ChatList({
         <p className="text-gray-400">No friends have logged in yet.</p>
       ) : (
         friends.map((friend) => (
+          console.log(friend),
           <div
             key={friend.steamid}
             onClick={() => onSelectFriend(friend)} 

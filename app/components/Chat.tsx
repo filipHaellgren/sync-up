@@ -38,6 +38,8 @@ export default function Chat({
   useEffect(() => {
     if (!currentUserId || !friendId) return;
 
+    console.log( "F", friendId, "U", currentUserId);
+
     const fetchProfiles = async () => {
       try {
         const [youRes, friendRes] = await Promise.all([
@@ -46,6 +48,7 @@ export default function Chat({
         ]);
         const you = await youRes.json();
         const friend = await friendRes.json();
+        console.log
 
         setUserProfiles({
           [currentUserId]: you,
@@ -102,17 +105,28 @@ export default function Chat({
     setNewMessage("");
   };
 
-  const getDisplayName = (userId: string) =>
-    userProfiles[userId]?.personaname || "Unknown";
-
+  const getDisplayName = (userId: string) => {
+    if (userId === currentUserId) {
+      return userProfiles[userId]?.personaname;
+    } else {
+      return userProfiles[friendId]?.personaname;
+    }
+  
+}
   const getAvatar = (userId: string) =>
-    userProfiles[userId]?.avatarfull ;
+    {
+      if (userId === currentUserId){ return userProfiles[userId]?.avatarfull}
+      else { return userProfiles[friendId]?.avatarfull}
+     
+   }
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto space-y-3 pr-2">
         {messages.map((msg, i) => {
           const showInfo = i === 0 || messages[i - 1].from !== msg.from;
+ 
+         
 
           return (
             <div key={i} className="flex items-start gap-3">
