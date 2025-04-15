@@ -17,6 +17,7 @@ export default function ClientDashboard({
   recentGames: any[];
 }) {
   const [selectedFriend, setSelectedFriend] = useState<any | null>(null);
+  console.log("Selected friend in Dashboard:", selectedFriend);
 
   return (
     <div className="flex h-screen bg-[#2B2D31] text-white">
