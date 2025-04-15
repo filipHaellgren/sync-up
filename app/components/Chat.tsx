@@ -14,13 +14,24 @@ export default function Chat({user, friend}: {user: ProfileType; friend: FriendT
   return (
     <div className="flex flex-col h-full">
     <div className="flex-1 overflow-y-auto space-y-3 pr-2">
-      {messages.map((msg, i) => (
-        <div key={i} className="flex items-start gap-3">
-          <div>
-            <p className="text-sm text-gray-200">{msg.text}</p>
-          </div>
-        </div>
-      ))}
+    {messages.map((msg, i) => (
+  <div key={i} className="flex items-start gap-3">
+    <div>
+      {msg.from === user.steamid ? (
+        <>
+          <img src={user.avatarfull} alt={user.personaname} className="w-10 h-10 rounded-full" />
+          <h4 className="text-sm font-semibold text-gray-300">{user.personaname}</h4>
+        </>
+      ) : (
+        <>
+          <img src={friend.avatarfull} alt={friend.personaname} className="w-10 h-10 rounded-full" />
+          <h4 className="text-sm font-semibold text-gray-300">{friend.personaname}</h4>
+        </>
+      )}
+      <p className="text-sm text-gray-200">{msg.text}</p>
+    </div>
+  </div>
+))}
     </div>
     <div className="pt-4 flex gap-2">
       <input
