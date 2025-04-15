@@ -30,6 +30,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const initializeChat = (user: ProfileType, friend: FriendType) => {
     const userId = user.steamid; 
     const friendId = friend.steamid; 
+    console.log("Initializing chat with userId:", userId, "and friendId:", friendId);
 
     const generatedChatId =
       userId < friendId ? `${userId}_${friendId}` : `${friendId}_${userId}`;
@@ -50,6 +51,9 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const sendMessage = async (userId: string, friendId: string) => {
     if (!newMessage.trim()) return;
+
+    console.log("Sending message:", newMessage, "from userId:", userId, "to friendId:", friendId);
+
 
     await addDoc(collection(db, "chats", chatId, "messages"), {
       text: newMessage,
