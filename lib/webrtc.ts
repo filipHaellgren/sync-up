@@ -121,3 +121,51 @@ export async function answerCall(callId: string) {
 
   return { pc, localStream, remoteStream };
 }
+
+// New vibe change
+
+// Add this function to listen for answer and handle remote stream
+export async function listenForAnswer(callId: string, peerConnection: RTCPeerConnection) {
+  const callDoc = doc(db, "calls", callId);
+  const calleeCandidatesCollection = collection(callDoc, "calleeCandidates");
+
+  // Listen for answer
+  const unsubscribe = onSnapshot(callDoc, async (snapshot) => {
+    const data = snapshot.data();
+    if (!peerConnection.currentRemoteDescription && data?.answer) {
+      const answerDescription = new RTCSessionDescription(data.answer);
+      await peerConnection.setRemoteDescription(answerDescription);
+    }
+  });
+
+  // Listen for callee ICE candidates
+  onSnapshot(calleeCandidatesCollection, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+        const data = change.doc.data();
+        peerConnection.addIceCandidate(new RTCIceCandidate(data));
+      }
+    });
+  });
+
+  return unsubscribe;
+}
+
+// Add function to end call
+export async function endCall(callId: string) {
+  const callDoc = doc(db, "calls", callId);
+  
+  // Update status in Firestore
+  await setDoc(callDoc, { status: "ended" }, { merge: true });
+  
+  // Clean up local resources
+  if (localPeerConnection) {
+    localPeerConnection.close();
+    localPeerConnection = null;
+  }
+  
+  if (remoteStream) {
+    remoteStream.getTracks().forEach(track => track.stop());
+    remoteStream = null;
+  }
+}
