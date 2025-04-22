@@ -2,7 +2,7 @@ import { getSteamSession } from "@/lib/getSteamSession";
 import { getSteamProfile, getSteamFriends, getRecentlyPlayedGames } from "@/lib/steam";
 import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import ClientDashboard from "../components/ClientDashboard";
+ import ClientDashboard from "../components/ClientDashboard"
 
 export default async function Dashboard() {
   const session = await getSteamSession();

@@ -11,14 +11,13 @@ interface CallContextProps {
   answerCall: () => Promise<void>;
   declineCall: () => void;
   initiateCall: (calleeId: string) => Promise<void>;
-  localVideoRef: React.RefObject<HTMLVideoElement>;
-  remoteVideoRef: React.RefObject<HTMLVideoElement>;
+  localVideoRef: React.RefObject<HTMLVideoElement | null>;
+  remoteVideoRef: React.RefObject<HTMLVideoElement | null>;
 }
 
-// This was missing - create the context first
 const CallContext = createContext<CallContextProps | undefined>(undefined);
 
-export function CallProvider({ children }: { children: ReactNode }) {
+export function CallProvider({ children, currentUserId }: { children: ReactNode, currentUserId: string }) {
   const [incomingCall, setIncomingCall] = useState<any>(null);
   const [inCall, setInCall] = useState(false);
   const [activeCallId, setActiveCallId] = useState<string | null>(null);
@@ -29,8 +28,8 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
   // Function to start a call
   const initiateCall = async (calleeId: string) => {
-    const userId = "YOUR_USER_ID"; // Replace with actual user ID from auth or profile
-    const result = await startCall(userId, calleeId);
+    // Now using the currentUserId prop instead of hardcoded value
+    const result = await startCall(currentUserId, calleeId);
     
     if (result) {
       const { callId, localStream } = result;
@@ -98,7 +97,6 @@ export function CallProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Add the useCall hook
 export function useCall() {
   const context = useContext(CallContext);
   if (!context) {
