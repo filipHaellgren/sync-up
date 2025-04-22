@@ -17,7 +17,7 @@ let remoteStream: MediaStream | null = null;
  */
 export async function startCall(callerId: string, calleeId: string) {
   const callId = `${callerId}_${calleeId}`;
-  const callDoc = doc(db, "calls", callId);
+  const callDoc = doc(db, "Calls", callId);
   const callerCandidatesCollection = collection(callDoc, "callerCandidates");
 
   localPeerConnection = new RTCPeerConnection({
@@ -60,7 +60,7 @@ export async function startCall(callerId: string, calleeId: string) {
  * Answers an incoming WebRTC call using the callId and sets up the peer connection.
  */
 export async function answerCall(callId: string) {
-  const callDoc = doc(db, "calls", callId);
+  const callDoc = doc(db, "Calls", callId);
   const answerCandidatesCollection = collection(callDoc, "calleeCandidates");
   const offerCandidatesCollection = collection(callDoc, "callerCandidates");
 
@@ -126,7 +126,7 @@ export async function answerCall(callId: string) {
 
 // Add this function to listen for answer and handle remote stream
 export async function listenForAnswer(callId: string, peerConnection: RTCPeerConnection) {
-  const callDoc = doc(db, "calls", callId);
+  const callDoc = doc(db, "Calls", callId);
   const calleeCandidatesCollection = collection(callDoc, "calleeCandidates");
 
   // Listen for answer
@@ -153,7 +153,7 @@ export async function listenForAnswer(callId: string, peerConnection: RTCPeerCon
 
 // Add function to end call
 export async function endCall(callId: string) {
-  const callDoc = doc(db, "calls", callId);
+  const callDoc = doc(db, "Calls", callId);
   
   // Update status in Firestore
   await setDoc(callDoc, { status: "ended" }, { merge: true });

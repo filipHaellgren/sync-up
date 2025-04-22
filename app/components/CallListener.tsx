@@ -12,7 +12,7 @@ export default function CallListener({ userId }: { userId: string }) {
   useEffect(() => {
     // Listen for calls where you are the callee
     const callsQuery = query(
-      collection(db, "calls"),
+      collection(db, "Calls"),
       where("calleeId", "==", userId),
       where("status", "==", "calling")
     );

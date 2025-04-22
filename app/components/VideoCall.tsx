@@ -11,7 +11,7 @@ export default function VideoCall({ currentUserId, friendId }: { currentUserId: 
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "calls", `${currentUserId}`), (snapshot) => {
+    const unsubscribe = onSnapshot(doc(db, "Calls", `${currentUserId}`), (snapshot) => {
       const data = snapshot.data();
       if (data?.calleeId === currentUserId && data.offer && !data.answer) {
         setIncomingCallId(snapshot.id);
