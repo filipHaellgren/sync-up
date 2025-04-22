@@ -1,30 +1,25 @@
 "use client";
 
 import { useCall } from "../context/CallContext";
+import { useRouter } from "next/navigation";
 
 export default function CallPopup() {
-  const { incomingCall, answerCall, declineCall } = useCall();
+  const { activeCallId, callerId, answerCall, declineCall } = useCall();
+  const router = useRouter();
 
-  if (!incomingCall) return null;
+  if (!activeCallId || !callerId) return null;
+
+  const handleAnswer = () => {
+    answerCall();
+    router.push("/dashboard"); // or whatever route renders the <Chat> component
+  };
 
   return (
-    <div className="fixed bottom-4 right-4 bg-gray-800 text-white p-4 rounded shadow-lg z-50">
-      <p className="mb-2 font-semibold">
-        📞 Incoming call from: {incomingCall.from}
-      </p>
-      <div className="flex gap-2">
-        <button
-          onClick={answerCall}
-          className="bg-green-500 px-4 py-1 rounded hover:bg-green-600"
-        >
-          Answer
-        </button>
-        <button
-          onClick={declineCall}
-          className="bg-red-500 px-4 py-1 rounded hover:bg-red-600"
-        >
-          Decline
-        </button>
+    <div className="fixed top-4 right-4 bg-gray-800 p-4 rounded shadow-lg z-50">
+      <p className="text-white">📞 Incoming call from {callerId}</p>
+      <div className="flex gap-2 mt-2">
+        <button onClick={handleAnswer} className="bg-green-500 px-4 py-1 rounded text-white">Answer</button>
+        <button onClick={declineCall} className="bg-red-500 px-4 py-1 rounded text-white">Decline</button>
       </div>
     </div>
   );

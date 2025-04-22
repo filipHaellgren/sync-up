@@ -7,7 +7,7 @@ import GameCard from "./GameCard";
 import { FriendType, ProfileType } from "../styles";
 import { ChatProvider } from "../context/ChatContext";
 import { CallProvider } from "../context/CallContext";
-import CallPopup from "./callPopUp";
+import CallPopup from "./Callpopup";
 
 export default function ClientDashboard({
   profile,
@@ -22,7 +22,7 @@ export default function ClientDashboard({
   console.log("Selected friend in Dashboard:", selectedFriend);
 
   return (
-    <CallProvider>
+    <CallProvider currentUserId={profile.steamid}>
       <div className="flex h-screen bg-[#2B2D31] text-white">
         {/* Sidebar */}
         <Sidebar
