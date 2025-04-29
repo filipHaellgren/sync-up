@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useChat } from "../context/ChatContext";
 import CallMenu from "./CallMenu";
 import { ProfileType } from "../styles";
+import CallNotif from "./CallNotif";
 
 
 
@@ -44,6 +45,7 @@ export default function Chat({ user, friend }: {user: ProfileType, friend: Profi
   </div>
 ))}
 <CallMenu user={user} friend={friend}/>
+<CallNotif callId={friend.steamid} friend={friend}/>
     </div>
     <div className="pt-4 flex gap-2">
       <input
