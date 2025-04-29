@@ -7,6 +7,8 @@ import GameCard from "./GameCard"; // 👈 updated import
 import { FriendType, ProfileType } from "../styles";
 import { ChatProvider } from "../context/ChatContext";
 import { CallProvider } from "../context/CallContext";
+import CallListener from "./CallListener";
+import CallNotif from "./CallNotif";
 
 export default function ClientDashboard({
   profile,
@@ -34,13 +36,11 @@ export default function ClientDashboard({
         {selectedFriend ? (
           <ChatProvider>
             <CallProvider>
-
-          <Chat
-            user={profile}
-            friend={selectedFriend}
-            />
+              <CallListener currentUser={profile} friends={friends} />
+              <CallNotif />
+              <Chat user={profile} friend={selectedFriend} />
             </CallProvider>
-            </ChatProvider>
+          </ChatProvider>
         ) : (
           <div>
             <h1 className="text-xl font-bold mb-4">
