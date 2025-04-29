@@ -1,12 +1,38 @@
 "use client";
 
 import { useEffect } from "react";
-import { FriendType, ProfileType } from "../styles";
 import { useChat } from "../context/ChatContext";
 import CallMenu from "./CallMenu";
 
-export default function Chat({user, friend}: {user: ProfileType; friend: FriendType;}) {
-  const { messages, newMessage, setNewMessage, sendMessage, initializeChat } = useChat();
+interface Props {
+  user: {
+    steamid: string;
+    personaname: string;
+    avatarfull: string;
+  };
+  friend: {
+    steamid: string;
+    personaname: string;
+    avatarfull: string;
+  };
+}
+
+export default function Chat({ user, friend }: Props) {
+  const {
+    messages,
+    newMessage,
+    setNewMessage,
+    sendMessage,
+    initializeChat,
+  } = useChat();
+
+  const steamUserID = user.steamid;
+  const userName = user.personaname;
+  const userAvatar = user.avatarfull;
+
+  const friendSteamId = friend.steamid;
+  const friendName = friend.personaname;
+  const friendAvatar = friend.avatarfull;
 
   useEffect(() => {
     initializeChat(user, friend);
