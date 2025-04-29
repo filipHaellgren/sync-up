@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { FriendType, ProfileType } from "../styles";
 import { useChat } from "../context/ChatContext";
+import CallMenu from "./CallMenu";
 
 export default function Chat({user, friend}: {user: ProfileType; friend: FriendType;}) {
   const { messages, newMessage, setNewMessage, sendMessage, initializeChat } = useChat();
@@ -32,6 +33,7 @@ export default function Chat({user, friend}: {user: ProfileType; friend: FriendT
     </div>
   </div>
 ))}
+<CallMenu user={user} friend={friend}/>
     </div>
     <div className="pt-4 flex gap-2">
       <input
@@ -49,6 +51,7 @@ export default function Chat({user, friend}: {user: ProfileType; friend: FriendT
       >
         Send
       </button>
+      
     </div>
   </div>
   );

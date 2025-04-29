@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import GameCard from "./GameCard"; // 👈 updated import
 import { FriendType, ProfileType } from "../styles";
 import { ChatProvider } from "../context/ChatContext";
+import { CallProvider } from "../context/CallContext";
 
 export default function ClientDashboard({
   profile,
@@ -32,10 +33,13 @@ export default function ClientDashboard({
       <main className="flex-1 p-6 overflow-y-auto">
         {selectedFriend ? (
           <ChatProvider>
+            <CallProvider>
+
           <Chat
             user={profile}
             friend={selectedFriend}
             />
+            </CallProvider>
             </ChatProvider>
         ) : (
           <div>
