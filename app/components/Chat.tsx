@@ -3,21 +3,11 @@
 import { useEffect } from "react";
 import { useChat } from "../context/ChatContext";
 import CallMenu from "./CallMenu";
+import { ProfileType } from "../styles";
 
-interface Props {
-  user: {
-    steamid: string;
-    personaname: string;
-    avatarfull: string;
-  };
-  friend: {
-    steamid: string;
-    personaname: string;
-    avatarfull: string;
-  };
-}
 
-export default function Chat({ user, friend }: Props) {
+
+export default function Chat({ user, friend }: {user: ProfileType, friend: ProfileType}) {
   const {
     messages,
     newMessage,
@@ -26,13 +16,7 @@ export default function Chat({ user, friend }: Props) {
     initializeChat,
   } = useChat();
 
-  const steamUserID = user.steamid;
-  const userName = user.personaname;
-  const userAvatar = user.avatarfull;
 
-  const friendSteamId = friend.steamid;
-  const friendName = friend.personaname;
-  const friendAvatar = friend.avatarfull;
 
   useEffect(() => {
     initializeChat(user, friend);
