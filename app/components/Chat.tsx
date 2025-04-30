@@ -54,7 +54,7 @@ export default function Chat({
           </div>
         ))}
         <CallMenu user={user} friend={friend} />
-       
+       <CallNotif/>
       </div>
       <div className="pt-4 flex gap-2">
         <input
