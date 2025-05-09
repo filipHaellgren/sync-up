@@ -5,7 +5,9 @@ import {
   doc,
   setDoc,
   getDoc,
+  addDoc,
   onSnapshot,
+  collection,
 } from "firebase/firestore";
 
 
@@ -43,6 +45,8 @@ export function useRTC(): RTCHookResult {
         // Add more STUN/TURN servers as needed
       ],
     });
+    pc.onicecandidate;
+    pc.addIceCandidate();
     setPeerConnection(pc);
 
     return () => {
@@ -87,6 +91,40 @@ export function useRTC(): RTCHookResult {
         offer: offer,
         status: "pending",
       });
+
+      const callerIceCollection = collection(callDocRef, "callerCandidates");
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          addDoc(callerIceCollection, {
+            candidate: event.candidate.toJSON(),
+          });
+        }
+      };
+
+      const calleeIceCollection = collection(callDocRef, "calleeCandidates");
+      const iceCandidateListener = onSnapshot(
+        calleeIceCollection,
+        (snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            if (change.type === "added") {
+              try {
+                const candidate = new RTCIceCandidate(
+                  change.doc.data().candidate
+                );
+                await peerConnection.addIceCandidate(candidate);
+              } catch (e: any) {
+                setError(`Error adding remote ICE candidate: ${e.message}`);
+              }
+            }
+          });
+        }
+      );
+
+       useEffect(() => {
+         return () => {
+           iceCandidateListener(); 
+         };
+       }, [peerConnection]);
 
       onSnapshot(callDocRef, (snapshot) => {
         const data = snapshot.data();
@@ -138,6 +176,41 @@ export function useRTC(): RTCHookResult {
         },
         { merge: true }
       );
+
+      const calleeIceCollection = collection(callDoc, "calleeCandidates");
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          addDoc(calleeIceCollection, {
+            candidate: event.candidate.toJSON(),
+          });
+        }
+      };
+
+    
+      const callerIceCollection = collection(callDoc, "callerCandidates");
+      const iceCandidateListener = onSnapshot(
+        callerIceCollection,
+        (snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            if (change.type === "added") {
+              try {
+                const candidate = new RTCIceCandidate(
+                  change.doc.data().candidate
+                );
+                await peerConnection.addIceCandidate(candidate);
+              } catch (e: any) {
+                setError(`Error adding remote ICE candidate: ${e.message}`);
+              }
+            }
+          });
+        }
+      );
+
+       useEffect(() => {
+         return () => {
+           iceCandidateListener(); 
+         };
+       }, [peerConnection]);
 
       onSnapshot(callDoc, (snapshot) => {
         const data = snapshot.data();
