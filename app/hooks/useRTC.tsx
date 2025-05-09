@@ -31,6 +31,7 @@ export function useRTC(): RTCHookResult {
   const [isCalling, setIsCalling] = useState(false);
   const [isReceivingCall, setIsReceivingCall] = useState(false);
   const [callId, setCallId] = useState<string | null>(null);
+  const [callerId, setCallerId] = useState<string | null>(null);
 
 
   const { audioStream } = useUserMediaDevices();
@@ -102,7 +103,7 @@ export function useRTC(): RTCHookResult {
 
       const callDocRef = doc(db, "Calls", calleeId);
       await setDoc(callDocRef, {
-        callerId: "user1",
+        callerId: callerId,
         calleeId: calleeId,
         offer: offer,
         status: "pending",
