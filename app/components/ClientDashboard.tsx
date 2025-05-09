@@ -24,14 +24,13 @@ export default function ClientDashboard({
 
   return (
     <div className="flex h-screen bg-[#2B2D31] text-white">
-      {/* Sidebar */}
       <Sidebar
         profile={profile}
         friends={friends}
         onSelectFriend={setSelectedFriend}
       />
 
-      {/* Main */}
+
       <main className="flex-1 p-6 overflow-y-auto">
         {selectedFriend ? (
           <ChatProvider>
