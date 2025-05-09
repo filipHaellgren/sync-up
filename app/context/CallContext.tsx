@@ -13,16 +13,16 @@ interface CallContextType {
   isCalling: boolean;
   isReceivingCall: boolean;
   error: string | null;
-  availableAudioInputDevices: MediaDeviceInfo[]; // New state
-  availableVideoInputDevices: MediaDeviceInfo[]; // New state
-  selectedAudioInputDeviceId: string | undefined; // New state
-  selectedVideoInputDeviceId: string | undefined; // New state
-  getMediaDevices: () => Promise<void>; // New function
+  availableAudioInputDevices: MediaDeviceInfo[]; 
+  availableVideoInputDevices: MediaDeviceInfo[]; 
+  selectedAudioInputDeviceId: string | undefined; 
+  selectedVideoInputDeviceId: string | undefined; 
+  getMediaDevices: () => Promise<void>; 
   getLocalStream: () => Promise<void>;
   startVideoCall: (friend: FriendType, user: ProfileType) => Promise<void>;
-  startAudioCall: (friend: FriendType, user: ProfileType) => Promise<void>; // New function
+  startAudioCall: (friend: FriendType, user: ProfileType) => Promise<void>; 
   answerVideoCall: (callId: string) => Promise<void>;
-  answerAudioCall: (callId: string) => Promise<void>; // New function
+  answerAudioCall: (callId: string) => Promise<void>; 
   hangUp: () => void;
   setRemoteStream: (stream: MediaStream | null) => void;
   setIsReceivingCall: (isReceiving: boolean) => void;
@@ -30,8 +30,8 @@ interface CallContextType {
   setCallerInfo: (
     info: { id: string; name: string; avatar: string } | null
   ) => void;
-  selectAudioInputDevice: (deviceId: string) => void; // New function
-  selectVideoInputDevice: (deviceId: string) => void; // New function
+  selectAudioInputDevice: (deviceId: string) => void; 
+  selectVideoInputDevice: (deviceId: string) => void; 
 }
 
 const CallContext = createContext<CallContextType | undefined>(undefined);
@@ -75,7 +75,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getMediaDevices = async () => {
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true, video: true }); // Request permissions first
+      await navigator.mediaDevices.getUserMedia({ audio: true, video: true }); 
       const devices = await navigator.mediaDevices.enumerateDevices();
       const audioInputDevices: MediaDeviceInfo[] = [];
       const videoInputDevices: MediaDeviceInfo[] = [];
@@ -91,7 +91,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
       setAvailableAudioInputDevices(audioInputDevices);
       setAvailableVideoInputDevices(videoInputDevices);
 
-      // Select the first available devices as defaults (or you could have more sophisticated logic)
+      
       if (audioInputDevices.length > 0) {
         setSelectedAudioInputDeviceId(audioInputDevices[0].deviceId);
       }
@@ -109,10 +109,10 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
       const constraints: MediaStreamConstraints = {
         audio: selectedAudioInputDeviceId
           ? { deviceId: { exact: selectedAudioInputDeviceId } }
-          : true, // Use default if none selected
+          : true, 
         video: selectedVideoInputDeviceId
           ? { deviceId: { exact: selectedVideoInputDeviceId } }
-          : true, // Use default if none selected
+          : true, 
       };
 
       console.log("Getting local stream with constraints:", constraints);
@@ -122,12 +122,12 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
       console.log("Local stream obtained successfully.");
     } catch (err: any) {
       console.error("Error accessing media devices.", err);
-      setError("Error accessing media devices: " + err.message); // Include error message
+      setError("Error accessing media devices: " + err.message);
     }
   };
 
   const startVideoCall = async (friend: FriendType, user: ProfileType) => {
-    await getLocalStream(); // Ensure stream with selected devices
+    await getLocalStream();
     if (!localStream) return;
     try {
       const handleRemoteStream = (stream: MediaStream) => {
@@ -152,7 +152,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
         callerAvatar: user.avatarfull,
         calleeId: friend.steamid,
         callId: friend.steamid,
-        isVideoCall: true, // Indicate this is a video call
+        isVideoCall: true, 
       });
     } catch (err) {
       console.error("Error starting video call.", err);
@@ -162,12 +162,12 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const startAudioCall = async (friend: FriendType, user: ProfileType) => {
     try {
-      // Get audio-only stream
+     
       const audioStream = await navigator.mediaDevices.getUserMedia({
         audio: selectedAudioInputDeviceId
           ? { deviceId: { exact: selectedAudioInputDeviceId } }
           : true,
-        video: false, // No video!
+        video: false,
       });
       setLocalStream(audioStream);
 
@@ -194,7 +194,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
         callerAvatar: user.avatarfull,
         calleeId: friend.steamid,
         callId: friend.steamid,
-        isVideoCall: false, // Indicate audio-only
+        isVideoCall: false, 
       });
     } catch (err: any) {
       console.error("Error starting audio call.", err);
@@ -203,7 +203,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const answerVideoCall = async (callId: string) => {
-    await getLocalStream(); // Ensure stream with selected devices
+    await getLocalStream(); 
     if (!localStream) return;
     try {
       const handleRemoteStream = (stream: MediaStream) => {
@@ -224,7 +224,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const answerAudioCall = async (callId: string) => {
     try {
-      // Get audio-only stream
+   
       const audioStream = await navigator.mediaDevices.getUserMedia({
         audio: selectedAudioInputDeviceId
           ? { deviceId: { exact: selectedAudioInputDeviceId } }
@@ -263,7 +263,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({
         await deleteDoc(incomingCallRef);
       }
       if (localStream) {
-        localStream.getTracks().forEach((track) => track.stop()); // Stop all tracks
+        localStream.getTracks().forEach((track) => track.stop());
         setLocalStream(null);
       }
       console.log("Call ended.");
