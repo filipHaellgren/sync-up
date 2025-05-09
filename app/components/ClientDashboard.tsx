@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import GameCard from "./GameCard"; // 👈 updated import
 import { FriendType, ProfileType } from "../styles";
 import { ChatProvider } from "../context/ChatContext";
+import Settings from "./Settings";
 
 export default function ClientDashboard({
   profile,
@@ -51,6 +52,7 @@ export default function ClientDashboard({
             </div>
           </div>
         )}
+        <Settings/>
       </main>
     </div>
   );
