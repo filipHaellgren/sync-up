@@ -1,6 +1,6 @@
 import { db } from "@/lib/firebase";
 import { useUserMediaDevices } from "./useUserMediaDevices";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   doc,
   setDoc,
@@ -31,7 +31,10 @@ export function useRTC(): RTCHookResult {
   const [isCalling, setIsCalling] = useState(false);
   const [isReceivingCall, setIsReceivingCall] = useState(false);
   const [callId, setCallId] = useState<string | null>(null);
+
+
   const { audioStream } = useUserMediaDevices();
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     setLocalStream(audioStream);
@@ -71,6 +74,19 @@ export function useRTC(): RTCHookResult {
       };
     }
   }, [peerConnection]);
+
+   useEffect(() => {
+     if (remoteStream) {
+       if (!audioRef.current) {
+         audioRef.current = new Audio();
+       }
+       audioRef.current.srcObject = remoteStream;
+       audioRef.current.play().catch((err) => {
+         console.error("error playing the audio", err);
+         setError("Error playing received audio: " + err.message);
+       });
+     }
+   }, [remoteStream]);
 
   const startCall = async (calleeId: string) => {
     if (!peerConnection) {
